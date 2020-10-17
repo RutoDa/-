@@ -18,7 +18,6 @@ def get_unpop_num():
     special_num_dict = sorted(special_num_dict.items(), key=lambda item:item[1])
     special_num_list = list(special_num_dict)
 
-
     import time
     year, month, day = time.localtime()[0:3]
 
