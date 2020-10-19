@@ -1,0 +1,112 @@
+def check(period,user_nums):
+    import requests
+    from bs4 import BeautifulSoup
+    payload = {"__EVENTTARGET":""
+           ,"__EVENTARGUMENT":""
+           ,"__LASTFOCU":""
+           ,"__VIEWSTATE":"g8cai+eJCK+M4jzvJNq/oTtS6diXAJOIOGrWDokukaePQraVlJKNOEY5sJi7OORLOdbWCEpTSffHqpjYKvJAtAqKyfTpuMCjApcV1ti3Gfct1Fpo0kCTabfZKlFsegW7n9dyBn2MAJbVcX1Y/vdnEC3ESepribPJcGn5KADP/2KAwwDQbHnyVv+YRWP/n7nVsBZZ8JsLiuBdUScxrPsQAO1juQh1fyTQJLzTUNDrnYrDiKAeljUVKObGI0vEQLlaM+f69IgIk8DcvGrVu5wHRFiuLekjzpb5BCo4++ndE1ZXtha/Fw0NYN6dbCZkFwz5L3Kon5/CIzhbAJX6Fn95zlqCfWkJVOfU8SKzsxQSYuzizp1bjX4Q6k0XvO/WDFOCMqqk2VCqYRS6r0ogiLvXftTsJOLRCFXgNcvTspBjgNRC8VNv+cVuVnKi0eBQsiGRy2OG5lyGukow1Oiv98NW0siVEv/6QNUI/SH+Suqxk9PVZ83i8XigYjrPF2yfgHboLsifsYsal/WT2Ey7rJIvSSNy4ThJjtzQuSkquipBRe5XALzG3WU+Ozz/bKivmDTDR7FeimmuCoGiwsfNJlmlHCEG7yVr0+YvWcZLoJiVK+J91sptYsBhdAGMkAljQUoL9o885UtRlmyDY1mFAB5Etb5lz4m7qc0HVyFt9HxOiLklMcyKxb4HB4UHcHbzows3FCkW2mxo8lAB8KIZ7FM8Vxp5HvlXA5aB8+E4fu7f3Abdcyexg3kN+IhImvnK4b+omOY6OoUYF2T5v/nrCevvhdYzZBvIiRSzELR+9TEvLZCMg93auMUpFs8X+IFhbLYmzMWBNkO3b9Rn5o+xvaH24SDbXUA2/2r/lPCKJMfEIgRn6G0EGZiLeHXhdLWm3/95M7BTRfQuvhABcOXCeX0bBCeYFhsSKuptRjVDjgCIL4qytsV0BGh+l4Tmx7xaWkzpucCWaci5EOy20xEyl3SB4JeG29icAvcfu3/XCXpQOLYD3t1GeJ1ouHX4BuZHfOtHiVLC0cgfD8qBEraLrxhUZFRnTZ3gWFG94KhKt7eZHYS4hHK0zylaTZdPDAntNt1MgpKhASAKp8fvpaU+3BujECfAVDF0ykJpriA9xWEJPKK3rhNO8AQLhIYIHWmMRs/rL+RjP+0ByJFy40mU3p89Cg6jCVtWTEZ4HNVodeFVAbve4C5cyQHXzFKypSk+Pz8TZXWCOUP7/xa52gDpercE36JyXnQT5UzcUsZw0etB3WdBJu3ZaMkEPgiSJ/4ir73QWnTYVM9wRphxFKZfWc2RPUKp7/z0crgWDCirAZBmjFz0XQbqCiU/RGW4cRjqgiiA4kZx5xa4nEoIBamPmNLRKjAUG3k="
+           ,"__VIEWSTATEGENERATOR":"D75607D0"
+           ,"__EVENTVALIDATION":"L2kA2cRYzxaBDG1vRpq4/0on5s2cUJGh8l1qU24ckFHELlVoXRfdnSU4kMDJtDZhBNw1y7qJtN3YzyUkBNC7gslNA8po5fBnL0qfAx0qdqDpmIEaqSMhAoj9xZjF6eoTm5Imw16/iMdYMUaStKtn9CLeAZ7BP7BRvont/D1ZnFUFLRtunsGRhP1hIhoI06CK8lkl2JDTWRQoHN/zPyeo4Ngq/QAJjPUok/2UFS7NfzH7vxxdADAmPtbFpPKyjG+CVA8QnTqmr7SThsEeGTU1qVXiZ+emNu0ry/9z1QfP1XyMywrJ+kO3JaLxqm2/jhhDukrXfOj939GfYwfCPp0tA+CDaSQAAzzm3xdJyGck5Wo8HtiZE2HUzPXYpKOOX2lLmwx5crBMGyy0Jjvr5TAikkmuG6rG4jOld99bzBmtuUvb4ABsarVFxRnqcD+75ALSAhp4BnCARwi9iFDTL6eXpQgKurXwX1o7M/R1cE/Pd7nWvOJ4Ne6lIp5H8NcMnfjwBblryDOfsnqGXkd28/1G8pT8CY6BKfGkwOBIZDSUYkljWUQBck2HHj63tqvrbb6ULpEA9yawKJHrnQa/T7GuPnFZNkapWnPliq9rsqI7CY0LHqlfJCW3dF9wUjsO8PE+I9upujblDsU0QUjdoFrkmcI1Gz/NXwQJ3+nF7PK92o54R6t8DeVppBTmy6tPmfnGeeZoWO3VYWAUMCjYNiYOEjvtGGSmw7VFYiCWSt0sdjWA0MmJ0918vC5yqs5n9c42D7EMbI0YBc50tgh+HdI4PKfyeIuEUtGljpm+QVSAo40r/clIWT3yOFxEb0FNEb2KaMhe/pW1t0F3fuqRPM6DUgUd7w0="
+           ,"SuperLotto638Control_history1$DropDownList1": "1"
+           ,"SuperLotto638Control_history1$chk": "radNO"
+           ,"SuperLotto638Control_history1$txtNO": period
+           ,"SuperLotto638Control_history1$btnSubmit": "查詢"}
+    res = requests.post("https://www.taiwanlottery.com.tw/lotto/superlotto638/history.aspx",data = payload)
+    payload2 = payload.copy()
+    payload2["SuperLotto638Control_history1$txtNO"] = "100"
+    res2 = requests.post("https://www.taiwanlottery.com.tw/lotto/superlotto638/history.aspx",data = payload2)
+    
+    def check_inner():
+        soup = BeautifulSoup(res.text)
+        id_list = ["#SuperLotto638Control_history1_dlQuery_No1_0","#SuperLotto638Control_history1_dlQuery_No2_0"
+                   ,"#SuperLotto638Control_history1_dlQuery_No3_0","#SuperLotto638Control_history1_dlQuery_No4_0"
+                   ,"#SuperLotto638Control_history1_dlQuery_No5_0","#SuperLotto638Control_history1_dlQuery_No6_0"
+                   ,"#SuperLotto638Control_history1_dlQuery_No7_0"]
+        prize_num_list = []
+        for id in id_list:
+            prize_num_list.append(soup.select(id)[0].text)
+        special_num = prize_num_list.pop()
+    
+        id2_list = ["#SuperLotto638Control_history1_dlQuery_SL638_CategA4_0","#SuperLotto638Control_history1_dlQuery_SL638_CategB4_0"
+                    ,"#SuperLotto638Control_history1_dlQuery_SL638_CategC4_0","#SuperLotto638Control_history1_dlQuery_SL638_CategD4_0"
+                    ,"#SuperLotto638Control_history1_dlQuery_SL638_CategE4_0","#SuperLotto638Control_history1_dlQuery_SL638_CategF4_0"
+                    ,"#SuperLotto638Control_history1_dlQuery_SL638_CategG4_0","#SuperLotto638Control_history1_dlQuery_SL638_CategH4_0"
+                    ,"#SuperLotto638Control_history1_dlQuery_SL638_CategJ4_0","#SuperLotto638Control_history1_dlQuery_SL638_CategI4_0"]
+        id3_list = ["#SuperLotto638Control_history1_dlQuery_SL638_CategA5_0","#SuperLotto638Control_history1_dlQuery_SL638_CategB5_0"]
+        prizes = []
+        prizes2 =[]
+        for id2 in id2_list:
+            prizes.append(soup.select(id2)[0].text)
+        
+        for id3 in id3_list:
+            prizes2.append(soup.select(id3)[0].text)
+        
+        for prize in prizes[:2]:
+            if prize == "0":
+                prizes[prizes.index(prize)] = prizes2[prizes.index(prize)]
+
+        index = 0 
+        for num in user_nums[:6]:
+            if num in prize_num_list:
+                index += 1
+        special_TF = user_nums[6] == special_num
+    
+
+        if index == 6 and special_TF:
+            print("""恭喜您中了 "頭獎" ，總獎金為 %s 元"""%(prizes[0]))
+        elif index == 6:
+            print("""恭喜您中了 "貳獎" ，總獎金為 %s 元"""%(prizes[1]))
+        elif index == 5 and special_TF:
+            print("""恭喜您中了 "參獎" ，總獎金為 %d 元"""%int(prizes[2]))
+        elif index == 5:
+            print("""恭喜您中了 "肆獎" ，總獎金為 %d 元"""%int(prizes[3]))
+        elif index == 4 and special_TF:
+            print("""恭喜您中了 "伍獎" ，總獎金為 %d 元"""%int(prizes[4]))
+        elif index == 4:
+            print("""恭喜您中了 "陸獎" ，總獎金為 %d 元"""%int(prizes[5]))
+        elif index == 3 and special_TF:
+            print("""恭喜您中了 "柒獎" ，總獎金為 %d 元"""%int(prizes[6]))
+        elif index == 2 and special_TF:
+            print("""恭喜您中了 "捌獎" ，總獎金為 %d 元"""%int(prizes[7]))
+        elif index == 3:
+            print("""恭喜您中了 "玖獎" ，總獎金為 %d 元"""%int(prizes[8]))
+        elif index == 1 and special_TF:
+            print("""恭喜您中了 "普獎" ，總獎金為 %d 元"""%int(prizes[9]))
+        else:
+            print("這期沒中獎，下期再接再厲!!~")
+    if res.status_code != 200:
+        print("不好意思~您的網路連線異常~")
+    else:
+        
+        if  BeautifulSoup(res.text).select("#SuperLotto638Control_history1_Label1")[0] == BeautifulSoup(res2.text).select("#SuperLotto638Control_history1_Label1")[0] :
+            print("\n期號錯誤，請確認您的期號是否存在")
+            return True
+        else:
+            check_inner()
+            return False
+
+period = input("請輸入期別\n=")
+while True:
+    ordinary_num = (input("""請輸入第一區號碼\n(注意1:如果是單數，請在前面加一個0，如:01,02)\
+                             (注意2:號碼與號碼間請以","隔開)\n=""")).split(",")
+    error = "\n發現格式錯誤或號碼超出範圍，請再輸入一次"
+    index = 0
+    for num in ordinary_num:
+        if int(num) < 1 or int(num) > 38 or ordinary_num.count(num) > 1:
+            index += 1
+        if int(num) <10 and num == str(int(num)):
+            index += 1
+    if index == 0 and len(ordinary_num)==6:
+        break
+    else:
+        print(error)
+         
+while True:
+    special_num = input("請輸入第二區號碼:")
+    if int(special_num)<9 and int(special_num)>0 and special_num!=str(int(special_num)):
+        break
+    print(error)
+ordinary_num.append(special_num)
+
+while check(period,ordinary_num):
+    period = input("請輸入期別\n=")
