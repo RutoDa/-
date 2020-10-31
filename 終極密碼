@@ -1,6 +1,7 @@
 from tkinter import *
 from random import randint,choice
 def rule():
+    """跳出規則視窗"""
     rule_window = Tk()
     rule_window.title("遊戲規則")
     text = Text(rule_window,bg="#1D1A05",fg="#FFFBBD",font="微軟正黑體 12",height=8,width=47)
@@ -16,15 +17,18 @@ def rule():
     text.pack()
     rule_window.mainloop()
 def start(): 
+    """生成終極密碼，並整理顯示面板"""
     global ans,status,MIN,MAX
     MIN,MAX=(1,100)
     ans= randint(MIN,MAX)
     clear()
     status = 0
-def show(buttonString):           
+def show(buttonString):     
+    """顯示"""      
     content = display.get()
     display.set(content + buttonString)
 def check():
+    """檢查: status=0 可以進行遊戲，=1 抽懲罰，=2 不進行任何動作"""
     global status
     if status == 2 or display.get()=="":
         pass
@@ -45,6 +49,7 @@ def check():
         display.set("""可點選下方"離開"離開遊戲 或 "重玩"再玩一次""")
         status = 2
 def game_main():
+    """遊戲主程式"""
     global MAX,MIN
     user_ans = display.get()
     display_T.set("")
@@ -63,6 +68,7 @@ def game_main():
         global status
         status = 1
 def clear():
+    """清空面板，並整理"""
     global MIN,MAX
     display_T.set("請輸入 %d~ %d之間的數字"%(MIN,MAX))
     display.set("")
@@ -125,5 +131,4 @@ Button(Game,text="離開",bg="#E6AA68",fg="#1D1A05",font="微軟正黑體 20",
        width=10,height=1,command=Game.destroy).grid(row=6,column=2,padx=1,pady=1)
 Button(Game,text="規則",bg="#E6AA68",fg="#1D1A05",font="微軟正黑體 20",
        width=10,height=1,command=rule).grid(row=6,column=0,padx=1,pady=1)
-       
 Game.mainloop()
